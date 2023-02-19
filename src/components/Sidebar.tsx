@@ -84,7 +84,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   const router = useRouter();
-  console.log("router = ", router);
+
   return (
     <Link
       href={link}
