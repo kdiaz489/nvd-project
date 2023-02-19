@@ -1,11 +1,11 @@
 import { GetServerSideProps } from "next";
 import { Button, Flex, Heading, Tooltip } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
-import { FiInfo } from "react-icons/fi";
 import moment from "moment";
 import Sidebar from "@/components/Sidebar";
 import { DataTable } from "@/components/DataTable";
 import { NvdData } from "@/types";
+import { getLatestCriticalVulns } from "@/utils/nvd";
 
 const Dashboard = ({ data }: { data: NvdData }) => {
   // fetching data this way was too slow. using getServerSideProps instead
@@ -84,31 +84,12 @@ const Dashboard = ({ data }: { data: NvdData }) => {
 
 // provides data to UI component via props. see below
 export const getServerSideProps: GetServerSideProps = async () => {
-  const getLatestCriticalVulns = async (
-    yesterday: string,
-    lastWeek: string
-  ) => {
-    let res = await fetch(
-      `https://services.nvd.nist.gov/rest/json/cves/2.0?cvssV3Severity=CRITICAL&pubStartDate=${lastWeek}&pubEndDate=${yesterday}`,
-      {
-        method: "GET",
-        headers: {
-          apiKey: process.env.NVD_API_KEY,
-        },
-      }
-    );
-
-    const nvdData = await res.json();
-
-    return nvdData;
-  };
-
+  const key = process.env.NVD_API_KEY;
   const lastWeekDay = moment().subtract(21, "days").toISOString();
-  const recentDay = moment().subtract(1, "days").toISOString();
+  const yesterday = moment().subtract(1, "days").toISOString();
 
-  let data = await getLatestCriticalVulns(recentDay, lastWeekDay);
+  let data = await getLatestCriticalVulns(key, yesterday, lastWeekDay);
 
-  // Pass data to the page via props
   return { props: { data } };
 };
 
