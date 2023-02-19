@@ -14,15 +14,7 @@ import {
   BoxProps,
   FlexProps,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
-  FiBook,
-} from "react-icons/fi";
+import { FiHome, FiSettings, FiMenu, FiBook } from "react-icons/fi";
 import { IconType } from "react-icons";
 
 interface LinkItemProps {
@@ -30,15 +22,28 @@ interface LinkItemProps {
   icon: IconType;
   link: string;
 }
+
+interface SidebarProps extends BoxProps {
+  onClose: () => void;
+}
+
+interface NavItemProps extends FlexProps {
+  icon: IconType;
+  children: any;
+  link: string;
+}
+
+interface MobileProps extends FlexProps {
+  onOpen: () => void;
+}
+
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, link: "/dashboard" },
-
   { name: "About CVE", icon: FiBook, link: "/about-cve" },
-
   { name: "Settings", icon: FiSettings, link: "#" },
 ];
 
-export default function Sidebar({ children }: { children: ReactNode }) {
+const Sidebar = ({ children }: { children: ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
@@ -66,11 +71,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       </Box>
     </Box>
   );
-}
-
-interface SidebarProps extends BoxProps {
-  onClose: () => void;
-}
+};
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
@@ -98,11 +99,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: any;
-  link: string;
-}
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   return (
     <Link
@@ -139,9 +135,6 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   );
 };
 
-interface MobileProps extends FlexProps {
-  onOpen: () => void;
-}
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
@@ -168,3 +161,5 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     </Flex>
   );
 };
+
+export default Sidebar;

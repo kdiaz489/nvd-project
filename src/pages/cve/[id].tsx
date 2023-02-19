@@ -2,8 +2,6 @@ import { Flex, Link, Box, Text, Heading } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Sidebar from "@/components/Sidebar";
 
-import { FiExternalLink, FiInfo } from "react-icons/fi";
-
 const CveId = ({ data }) => {
   return (
     <Sidebar>
@@ -67,7 +65,7 @@ export async function getServerSideProps(context) {
     {
       method: "GET",
       headers: {
-        apiKey: "bd849d4d-1d42-4898-a32c-039961ea1d4c",
+        apiKey: process.env.NVD_API_KEY,
       },
     }
   );

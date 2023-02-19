@@ -1,11 +1,10 @@
+// react and next
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
+// 3rd party libs
 import {
-  Box,
   Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Table,
   TableContainer,
   Td,
@@ -13,32 +12,12 @@ import {
   Thead,
   Tr,
   Tbody,
-  Tfoot,
 } from "@chakra-ui/react";
-import { FiSearch } from "react-icons/fi";
-import Sidebar from "@/components/Sidebar";
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import { getLatestCriticalVulns } from "@/utils/nvd";
 import moment from "moment";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// custom components
+import Sidebar from "@/components/Sidebar";
 
 interface NvdData {
   resultsPerPage: number;
@@ -103,9 +82,7 @@ const Dashboard = ({ data }) => {
                   <Td>{item.cve.id}</Td>
                   <Td>{item.cve.vulnStatus}</Td>
                   <Td>
-                    {JSON.stringify(
-                      item.cve.metrics.cvssMetricV31[0].exploitabilityScore
-                    )}
+                    {item.cve.metrics.cvssMetricV31[0].exploitabilityScore}
                   </Td>
                 </Tr>
               ))}
@@ -127,7 +104,7 @@ export async function getServerSideProps() {
       {
         method: "GET",
         headers: {
-          apiKey: "bd849d4d-1d42-4898-a32c-039961ea1d4c",
+          apiKey: process.env.NVD_API_KEY,
         },
       }
     );
