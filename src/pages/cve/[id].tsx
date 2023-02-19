@@ -2,6 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Flex, Link, Text, Heading } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Sidebar from "@/components/Sidebar";
+import { getVulnWithId } from "@/utils/nvd";
 
 const CveId = ({ data }) => {
   return (
@@ -65,20 +66,11 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const { params } = context;
+  const key = process.env.NVD_API_KEY;
+  const id = params.id as string;
 
-  let res = await fetch(
-    `https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=${params.id}`,
-    {
-      method: "GET",
-      headers: {
-        apiKey: process.env.NVD_API_KEY,
-      },
-    }
-  );
+  const data = await getVulnWithId(key, id);
 
-  const data = await res.json();
-
-  // Pass data to the page via props
   return { props: { data } };
 };
 
