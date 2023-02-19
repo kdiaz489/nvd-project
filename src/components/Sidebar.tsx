@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   IconButton,
   Box,
@@ -11,36 +11,19 @@ import {
   DrawerContent,
   Text,
   useDisclosure,
-  BoxProps,
-  FlexProps,
 } from "@chakra-ui/react";
-import { FiHome, FiSettings, FiMenu, FiBook } from "react-icons/fi";
-import { IconType } from "react-icons";
-
-interface LinkItemProps {
-  name: string;
-  icon: IconType;
-  link: string;
-}
-
-interface SidebarProps extends BoxProps {
-  onClose: () => void;
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: any;
-  link: string;
-}
-
-interface MobileProps extends FlexProps {
-  onOpen: () => void;
-}
+import { FiHome, FiMenu, FiBook } from "react-icons/fi";
+import {
+  LinkItemProps,
+  MobileProps,
+  NavItemProps,
+  SidebarProps,
+} from "@/types";
+import { useRouter } from "next/router";
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, link: "/dashboard" },
   { name: "About CVE", icon: FiBook, link: "/about-cve" },
-  { name: "Settings", icon: FiSettings, link: "#" },
 ];
 
 const Sidebar = ({ children }: { children: ReactNode }) => {
@@ -100,6 +83,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 };
 
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+  const router = useRouter();
+  console.log("router = ", router);
   return (
     <Link
       href={link}
@@ -112,6 +97,7 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
         mx="4"
         borderRadius="lg"
         role="group"
+        bgColor={router.pathname.includes(link) ? "#e1e1e1" : undefined}
         cursor="pointer"
         _hover={{
           bg: "blue.500",

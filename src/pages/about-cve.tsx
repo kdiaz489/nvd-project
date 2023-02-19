@@ -1,19 +1,16 @@
-// 3rd party libs
 import { Flex, Heading, Text } from "@chakra-ui/react";
-
-// custom components
 import Card from "@/components/Card";
 import Sidebar from "@/components/Sidebar";
 
 const AboutCve = () => {
   return (
     <Sidebar>
-      <Flex p="20" flexDir="column" gap={4}>
+      <Flex p={{ base: "0", lg: "20" }} flexDir="column" gap={4}>
         <Heading as="h2" size="xl">
           About CVE and NVD
         </Heading>
-        <Flex gap={3}>
-          <Card w="49%">
+        <Flex dir="row" flexWrap="wrap" gap={3}>
+          <Card w={{ base: "100%", lg: "49%" }}>
             <Text fontSize="xl" mb="5">
               What is CVE?
             </Text>
@@ -25,7 +22,7 @@ const AboutCve = () => {
               products and services from around the world, including NVD.
             </Text>
           </Card>
-          <Card w="49%">
+          <Card w={{ base: "100%", lg: "49%" }}>
             <Text fontSize="xl" mb="5">
               What is NVD?
             </Text>

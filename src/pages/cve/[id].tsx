@@ -1,11 +1,12 @@
-import { Flex, Link, Box, Text, Heading } from "@chakra-ui/react";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { Flex, Link, Text, Heading } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Sidebar from "@/components/Sidebar";
-
+import ReactSpeedometer from "react-d3-speedometer";
 const CveId = ({ data }) => {
   return (
     <Sidebar>
-      <Flex p="20" flexWrap="wrap" gap={4}>
+      <Flex p={{ base: "0", lg: "20" }} flexWrap="wrap" gap={4}>
         <Heading as="h2" size="xl">
           {data.vulnerabilities[0].cve.id}
         </Heading>
@@ -16,7 +17,7 @@ const CveId = ({ data }) => {
           </Text>
           <Text>{data.vulnerabilities[0].cve.descriptions[0].value}</Text>
         </Card>
-        <Card w="49%">
+        <Card w={{ base: "100%", lg: "49%" }}>
           <Text fontSize="xl" mb="5">
             Exploitability Score
           </Text>
@@ -27,7 +28,7 @@ const CveId = ({ data }) => {
             }
           </Text>
         </Card>
-        <Card w="49%">
+        <Card w={{ base: "100%", lg: "49%" }}>
           <Text fontSize="xl" mb="5">
             Impact Score
           </Text>
@@ -41,7 +42,9 @@ const CveId = ({ data }) => {
             <Link
               display="inline"
               color="blue.500"
-              href="https://cwe.mitre.org/top25/archive/2022/2022_cwe_top25.html"
+              href={`https://cwe.mitre.org/data/definitions/${data.vulnerabilities[0].cve.weaknesses[0].description[0].value.slice(
+                4
+              )}.html`}
               isExternal
             >
               &#9432;
@@ -57,7 +60,10 @@ const CveId = ({ data }) => {
   );
 };
 
-export async function getServerSideProps(context) {
+// provides data to UI component via props. see below
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const { params } = context;
 
   let res = await fetch(
@@ -74,6 +80,6 @@ export async function getServerSideProps(context) {
 
   // Pass data to the page via props
   return { props: { data } };
-}
+};
 
 export default CveId;

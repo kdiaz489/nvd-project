@@ -1,39 +1,14 @@
-// react and next
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-
-// 3rd party libs
-import {
-  Flex,
-  Table,
-  TableContainer,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Tbody,
-} from "@chakra-ui/react";
-
+import { GetServerSideProps } from "next";
+import { Button, Flex, Tooltip } from "@chakra-ui/react";
+import { createColumnHelper } from "@tanstack/react-table";
+import { FiInfo } from "react-icons/fi";
 import moment from "moment";
-
-// custom components
 import Sidebar from "@/components/Sidebar";
+import { DataTable } from "@/components/DataTable";
+import { NvdData } from "@/types";
 
-interface NvdData {
-  resultsPerPage: number;
-  startIndex: number;
-  totalResults: number;
-  format: string;
-  version: string;
-  timestamp: string;
-  vulnerabilities: any[];
-}
-
-const Dashboard = ({ data }) => {
-  const router = useRouter();
-  const [localData, setLocalData] = useState<any | null>(null);
-  const [localLoading, setLocalLoading] = useState<boolean>(true);
-
+const Dashboard = ({ data }: { data: NvdData }) => {
+  // fetching data this way was too slow. using getServerSideProps instead
   // const fetchNvdData = async () => {
   //   try {
   //     const res = await fetch("/api/nvd", {
@@ -54,47 +29,56 @@ const Dashboard = ({ data }) => {
   //   fetchNvdData();
   // }, []);
 
+  const columnHelper = createColumnHelper<any>();
+
+  const columns = [
+    columnHelper.accessor("id", {
+      cell: (info) => info.getValue(),
+      header: "To convert",
+    }),
+    columnHelper.accessor("vulnStatus", {
+      cell: (info) => info.getValue(),
+      header: "Vulnerability Status",
+    }),
+    columnHelper.accessor("exploitabilityScore", {
+      cell: (info) => info.getValue(),
+      header: "Exploitability Score",
+      meta: {
+        isNumeric: true,
+      },
+    }),
+  ];
+
+  const tabledata = data.vulnerabilities.map((item) => {
+    return {
+      id: item.cve.id,
+      vulnStatus: item.cve.vulnStatus,
+      exploitabilityScore:
+        item.cve.metrics.cvssMetricV31[0].exploitabilityScore,
+    };
+  });
+
   return (
     <Sidebar>
       <Flex p="20" flexDir="column">
-        <TableContainer
-          border="1px"
-          borderColor="#fafafa"
-          bgColor="white"
-          borderRadius="md"
-          mt="10"
+        <Tooltip
+          label="Click on a column header to sort"
+          hasArrow
+          fontSize="md"
+          aria-label="A tooltip"
+          placement="top"
         >
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Vuln Status</Th>
-                <Th>exploitability Score</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.vulnerabilities.map((item) => (
-                <Tr
-                  key={item.cve.id}
-                  onClick={() => router.push(`/cve/${item.cve.id}`)}
-                  _hover={{ bgColor: "#fafafa", cursor: "pointer" }}
-                >
-                  <Td>{item.cve.id}</Td>
-                  <Td>{item.cve.vulnStatus}</Td>
-                  <Td>
-                    {item.cve.metrics.cvssMetricV31[0].exploitabilityScore}
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+          <Button w="20px">&#9432;</Button>
+        </Tooltip>
+
+        <DataTable data={tabledata} columns={columns} />
       </Flex>
     </Sidebar>
   );
 };
 
-export async function getServerSideProps() {
+// provides data to UI component via props. see below
+export const getServerSideProps: GetServerSideProps = async () => {
   const getLatestCriticalVulns = async (
     yesterday: string,
     lastWeek: string
@@ -121,6 +105,6 @@ export async function getServerSideProps() {
 
   // Pass data to the page via props
   return { props: { data } };
-}
+};
 
 export default Dashboard;
