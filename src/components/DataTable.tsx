@@ -11,7 +11,7 @@ import {
 import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 import { DataTableProps } from "@/types";
 
-export function DataTable({ data, columns }) {
+export function DataTable({ data, columns }: DataTableProps<any>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const router = useRouter();
   const table = useReactTable({
