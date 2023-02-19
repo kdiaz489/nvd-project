@@ -1,8 +1,8 @@
 //
-// gets the MOST critical vulnerabilities reported in the NVD within the last week.
+// gets the MOST critical vulnerabilities reported in the NVD within pubStartDate and pubEndDate.
 //
-
 export const getLatestCriticalVulns = async (
+  key: string,
   yesterday: string,
   lastWeek: string
 ) => {
@@ -11,8 +11,26 @@ export const getLatestCriticalVulns = async (
     {
       method: "GET",
       headers: {
-        apiKey: "bd849d4d-1d42-4898-a32c-039961ea1d4c",
-        "Content-Type": "application/x-www-form-urlencoded",
+        apiKey: key,
+      },
+    }
+  );
+
+  const nvdData = await res.json();
+
+  return nvdData;
+};
+
+//
+// get a vulnerability reported in the NVD with an id.
+//
+export const getVulnWithId = async (key: string, id: string) => {
+  let res = await fetch(
+    `https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=${id}`,
+    {
+      method: "GET",
+      headers: {
+        apiKey: key,
       },
     }
   );
