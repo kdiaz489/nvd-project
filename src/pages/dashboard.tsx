@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { Button, Flex, Tooltip } from "@chakra-ui/react";
+import { Button, Flex, Heading, Tooltip } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { FiInfo } from "react-icons/fi";
 import moment from "moment";
@@ -61,15 +61,20 @@ const Dashboard = ({ data }: { data: NvdData }) => {
   return (
     <Sidebar>
       <Flex p="20" flexDir="column">
-        <Tooltip
-          label="Click on a column header to sort"
-          hasArrow
-          fontSize="md"
-          aria-label="A tooltip"
-          placement="top"
-        >
-          <Button w="20px">&#9432;</Button>
-        </Tooltip>
+        <Flex>
+          <Heading as="h2" size="xl">
+            Vulnerabilities List
+          </Heading>
+          <Tooltip
+            label=" This dashboard fetches data from the CVE API provided by the NVD; The api is used to easily retrieve information on a single CVE or a collection of CVE. Note: Click on a column header to sort."
+            hasArrow
+            fontSize="md"
+            aria-label="A tooltip"
+            placement="top"
+          >
+            <Button w="20px">&#9432;</Button>
+          </Tooltip>
+        </Flex>
 
         <DataTable data={tabledata} columns={columns} />
       </Flex>
