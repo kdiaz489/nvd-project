@@ -44,6 +44,7 @@ export function DataTable({ data, columns }: DataTableProps<any>) {
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
                   isNumeric={meta?.isNumeric}
+                  _hover={{ color: "blue.500", cursor: "pointer" }}
                 >
                   {flexRender(
                     header.column.columnDef.header,
