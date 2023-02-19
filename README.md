@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, request an api key at https://nvd.nist.gov/developers/request-an-api-key and create a .env.local file with the following environment variable
+
+```bash
+NVD_API_KEY= "YourAPIKey"
+```
+
+Next, to run the development server use this command:
 
 ```bash
 npm run dev
