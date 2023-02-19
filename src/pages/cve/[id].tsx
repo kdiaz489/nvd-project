@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Flex, Link, Text, Heading } from "@chakra-ui/react";
 import Card from "@/components/Card";
 import Sidebar from "@/components/Sidebar";
-import ReactSpeedometer from "react-d3-speedometer";
+
 const CveId = ({ data }) => {
   return (
     <Sidebar>
